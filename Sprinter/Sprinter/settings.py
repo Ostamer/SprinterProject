@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'SprinterReact',
+    'SpriterReact',
     'rest_framework',
     'corsheaders',
     'django_filters',
