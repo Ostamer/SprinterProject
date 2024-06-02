@@ -5,6 +5,8 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+import uuid
+
 from django.db import models
 
 
@@ -78,9 +80,9 @@ class AuthUserUserPermissions(models.Model):
 
 
 class Commentary(models.Model):
-    comm_id = models.UUIDField(primary_key=True)
+    comm_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     comm_text = models.CharField()
-    create_date = models.DateTimeField()
+    create_date = models.DateTimeField(auto_now_add=True)
     parent_comm = models.ForeignKey('self', models.DO_NOTHING, blank=True, null=True)
     author = models.ForeignKey('SpUser', models.DO_NOTHING)
     post = models.ForeignKey('Post', models.DO_NOTHING)
@@ -136,12 +138,12 @@ class DjangoSession(models.Model):
 
 
 class Post(models.Model):
-    post_id = models.UUIDField(primary_key=True)
+    post_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField()
     small_text = models.CharField()
     full_text = models.CharField()
     image_src = models.CharField()
-    create_date = models.DateTimeField()
+    create_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey('SpUser', models.DO_NOTHING)
     likes_count = models.IntegerField(blank=True, null=True)
 
@@ -160,13 +162,13 @@ class PostTag(models.Model):
 
 
 class SpUser(models.Model):
-    user_id = models.UUIDField(primary_key=True)
+    user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     last_name = models.CharField()
     first_name = models.CharField()
     middle_name = models.CharField(blank=True, null=True)
     login = models.CharField(blank=True, null=True)
     user_password = models.CharField()
-    create_date = models.DateTimeField(blank=True, null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         managed = False
