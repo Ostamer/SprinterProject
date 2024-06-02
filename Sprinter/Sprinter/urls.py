@@ -17,7 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from SpriterReact.views import AuthAPIView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', include('SprinterReact.urls')),
+    path('api/v1/auth', AuthAPIView.as_view())
 ]
