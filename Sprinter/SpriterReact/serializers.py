@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from SpriterReact.models import SpUser
+from SpriterReact.models import SpUser, Post
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -35,3 +35,8 @@ class LoginSerializer(serializers.Serializer):
             data['user'] = user
             return data
         raise serializers.ValidationError("Unable to log in with provided credentials.")
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ["post_id", "title", "small_text", "likes_count"]
