@@ -10,6 +10,7 @@ import uuid
 from django.db import models
 
 
+
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -161,14 +162,35 @@ class PostTag(models.Model):
         db_table = 'post_tag'
 
 
-class SpUser(models.Model):
-    user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    last_name = models.CharField()
-    first_name = models.CharField()
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+
+class MyUserManager(BaseUserManager):
+    def create_user(self, login, password, **extra_fields):
+        """Create and return a `User` with an email, username and password."""
+        if not login:
+            raise ValueError('The Login must be set')
+        user = self.model(login=login, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+class SpUser(AbstractBaseUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    last_name = models.CharField(null=True)
+    first_name = models.CharField(null=True)
     middle_name = models.CharField(blank=True, null=True)
-    login = models.CharField(blank=True, null=True)
-    user_password = models.CharField()
+    login = models.EmailField(unique=True)
+    password = models.CharField()
     create_date = models.DateTimeField(auto_now_add=True)
+    last_login = models.DateTimeField(null=True, blank=True)
+
+    objects = MyUserManager()
+
+    USERNAME_FIELD = 'login'
+    REQUIRED_FIELDS = []
+
+    def __str__(self):
+        return self.login
 
     class Meta:
         managed = False

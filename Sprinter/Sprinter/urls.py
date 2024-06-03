@@ -17,9 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from SpriterReact.views import AuthAPIView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView
+)
+from SpriterReact.views import SignUpView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/auth', AuthAPIView.as_view())
+    path('api/v1/signup/', SignUpView.as_view(), name = "signup"),
+    path('api/v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/v1/token/verify/', TokenVerifyView.as_view(), name='token_verify')
 ]
