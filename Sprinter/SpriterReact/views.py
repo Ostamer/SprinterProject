@@ -44,6 +44,7 @@ class LoginView(views.APIView):
             return Response({
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
+                'user_id': str(user.id)
             })
         return Response(serializer.errors, status=400)
 
