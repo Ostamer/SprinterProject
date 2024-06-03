@@ -8,7 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from SpriterReact.models import SpUser, Post
 from SpriterReact.serializers import UserSerializer, CheckLoginSerializer, LoginSerializer, PostSerializer, \
-    PostCreateSerializer
+    PostCreateSerializer, PostGetSerializer
 
 
 # Create your views here.
@@ -60,5 +60,5 @@ class PostGetView(generics.ListAPIView):
         post = Post.objects.filter(post_id=post_id).first()
         if not post:
             return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = PostSerializer(post)
+        serializer = PostGetSerializer(post)
         return Response(serializer.data)
