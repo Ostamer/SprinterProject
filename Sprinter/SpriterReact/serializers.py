@@ -13,3 +13,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return SpUser.objects.create_user(**validated_data)
+
+
+class CheckLoginSerializer(serializers.Serializer):
+    login = serializers.EmailField()
+
+    def validate_login(self, value):
+        return value
