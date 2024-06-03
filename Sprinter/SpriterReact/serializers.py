@@ -53,3 +53,8 @@ class PostCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return Post.objects.create(**validated_data)
+
+class PostGetSerializer(serializers.ModelSerializer): # для получения определенного поста при клике из ленты
+    class Meta:
+        model = Post
+        fields = '__all__'

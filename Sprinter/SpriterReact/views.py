@@ -53,3 +53,11 @@ class PostListView(generics.ListAPIView): # для отображения лен
 
 class PostCreateView(generics.CreateAPIView): # для создания поста
     serializer_class = PostCreateSerializer
+
+class PostGetView(generics.ListAPIView):
+    def get(self, request, post_id):
+        post = Post.objects.filter(post_id=post_id).first()
+        if not post:
+            return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
