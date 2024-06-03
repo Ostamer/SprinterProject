@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from rest_framework import serializers
 
 from SpriterReact.models import SpUser
@@ -20,3 +21,17 @@ class CheckLoginSerializer(serializers.Serializer):
 
     def validate_login(self, value):
         return value
+
+
+class LoginSerializer(serializers.Serializer):
+    login = serializers.EmailField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        login = data.get('login')
+        password = data.get('password')
+        user = authenticate(login=login, password=password)
+        if user and user.is_active:
+            data['user'] = user
+            return data
+        raise serializers.ValidationError("Unable to log in with provided credentials.")

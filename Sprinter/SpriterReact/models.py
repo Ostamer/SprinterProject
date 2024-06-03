@@ -180,7 +180,7 @@ class SpUser(AbstractBaseUser):
     first_name = models.CharField(null=True)
     middle_name = models.CharField(blank=True, null=True)
     login = models.EmailField(unique=True)
-    password = models.CharField()
+    password = models.CharField(max_length=128)
     create_date = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(null=True, blank=True)
 
