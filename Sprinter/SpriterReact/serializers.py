@@ -55,6 +55,7 @@ class PostCreateSerializer(serializers.ModelSerializer):
         return Post.objects.create(**validated_data)
 
 class PostGetSerializer(serializers.ModelSerializer): # для получения определенного поста при клике из ленты
+    user = UserFIOSerializer()
     class Meta:
         model = Post
         fields = '__all__'
