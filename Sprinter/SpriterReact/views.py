@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework import views, status
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from SpriterReact.models import SpUser
-from SpriterReact.serializers import UserSerializer, CheckLoginSerializer, LoginSerializer
+from SpriterReact.models import SpUser, Post
+from SpriterReact.serializers import UserSerializer, CheckLoginSerializer, LoginSerializer, PostSerializer
 
 
 # Create your views here.
@@ -45,3 +45,7 @@ class LoginView(views.APIView):
                 'access': str(refresh.access_token),
             })
         return Response(serializer.errors, status=400)
+
+class PostListView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
