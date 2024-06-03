@@ -36,7 +36,12 @@ class LoginSerializer(serializers.Serializer):
             return data
         raise serializers.ValidationError("Unable to log in with provided credentials.")
 
+class UserFIOSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SpUser
+        fields = ["last_name", "middle_name", "first_name"]
 class PostSerializer(serializers.ModelSerializer):
+    user = UserFIOSerializer()
     class Meta:
         model = Post
-        fields = ["post_id", "title", "small_text", "likes_count"]
+        fields = ["post_id", "title", "small_text", "likes_count", "user"]
