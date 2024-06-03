@@ -22,7 +22,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
-from SpriterReact.views import SignUpView, CheckLoginRegisteredView, LoginView, PostListView
+from SpriterReact.views import SignUpView, CheckLoginRegisteredView, LoginView, PostListView, PostCreateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/v1/check-login/', CheckLoginRegisteredView.as_view(), name = "check-login"),
     path('api/v1/newsData/', PostListView.as_view(), name='news-data'),
     path('api/v1/login/', LoginView.as_view(), name='login'),
+    path('api/v1/post-create/', PostCreateView.as_view(), name='create-post'),
     path('api/v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/token/verify/', TokenVerifyView.as_view(), name='token_verify')

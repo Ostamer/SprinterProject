@@ -40,8 +40,16 @@ class UserFIOSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpUser
         fields = ["last_name", "middle_name", "first_name"]
-class PostSerializer(serializers.ModelSerializer):
+class PostSerializer(serializers.ModelSerializer): # для возвращения в ленту всех постов
     user = UserFIOSerializer()
     class Meta:
         model = Post
         fields = ["post_id", "title", "small_text", "likes_count", "user"]
+
+class PostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ["title", "small_text", "full_text", "image_src", "user"]
+
+    def create(self, validated_data):
+        return Post.objects.create(**validated_data)

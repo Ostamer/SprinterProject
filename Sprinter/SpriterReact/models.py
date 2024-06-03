@@ -146,7 +146,7 @@ class Post(models.Model):
     image_src = models.CharField()
     create_date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey('SpUser', models.DO_NOTHING)
-    likes_count = models.IntegerField(blank=True, null=True)
+    likes_count = models.IntegerField(blank=True, null=True, default=0)
 
     class Meta:
         managed = False

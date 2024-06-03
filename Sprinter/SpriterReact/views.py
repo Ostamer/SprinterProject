@@ -7,7 +7,8 @@ from rest_framework import views, status
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from SpriterReact.models import SpUser, Post
-from SpriterReact.serializers import UserSerializer, CheckLoginSerializer, LoginSerializer, PostSerializer
+from SpriterReact.serializers import UserSerializer, CheckLoginSerializer, LoginSerializer, PostSerializer, \
+    PostCreateSerializer
 
 
 # Create your views here.
@@ -46,6 +47,9 @@ class LoginView(views.APIView):
             })
         return Response(serializer.errors, status=400)
 
-class PostListView(generics.ListAPIView):
+class PostListView(generics.ListAPIView): # для отображения ленты
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+class PostCreateView(generics.CreateAPIView): # для создания поста
+    serializer_class = PostCreateSerializer
