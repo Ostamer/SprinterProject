@@ -152,14 +152,13 @@ class Post(models.Model):
         managed = False
         db_table = 'post'
 
-
-class PostTag(models.Model):
+class PostLike(models.Model):
     post = models.ForeignKey(Post, models.DO_NOTHING, blank=True, null=True)
-    tag = models.ForeignKey('Tag', models.DO_NOTHING, blank=True, null=True)
+    user = models.ForeignKey('SpUser', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'post_tag'
+        db_table = 'post_like'
 
 
 class PostTag(models.Model):
