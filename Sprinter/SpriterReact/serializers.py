@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 
-from SpriterReact.models import SpUser, Post
+from SpriterReact.models import SpUser, Post, PostLike
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -42,9 +42,20 @@ class UserFIOSerializer(serializers.ModelSerializer):
         fields = ["last_name", "middle_name", "first_name"]
 class PostSerializer(serializers.ModelSerializer): # для возвращения в ленту всех постов
     user = UserFIOSerializer()
+    liked = serializers.SerializerMethodField()
     class Meta:
         model = Post
-        fields = ["post_id", "title", "small_text", "likes_count", "user"]
+        fields = ["post_id", "title", "small_text", "likes_count", "user", "liked"]
+
+    def get_liked(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            # Проверяем, лайкнул ли пользователь пост
+            user = request.user
+            liked = PostLike.objects.filter(post=obj, user=user).exists()
+            return liked
+        return False
+
 
 class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
