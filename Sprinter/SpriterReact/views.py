@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import views, status
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from SpriterReact.models import SpUser, Post
+from SpriterReact.models import SpUser, Post, PostLike
 from SpriterReact.serializers import UserSerializer, CheckLoginSerializer, LoginSerializer, PostSerializer, \
     PostCreateSerializer, PostGetSerializer
 
@@ -62,3 +62,39 @@ class PostGetView(generics.ListAPIView):
             return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = PostGetSerializer(post)
         return Response(serializer.data)
+
+
+class PostLikeView(generics.GenericAPIView):
+    serializer_class = PostSerializer
+
+    def post(self, request, id):
+        post = Post.objects.get(post_id=id)
+        user_id = request.data.get('user_id')
+
+        liked = PostLike.objects.filter(post=post, user_id=user_id).exists()
+
+        if liked:
+            # Если пользователь уже поставил лайк, уменьшаем количество лайков
+            if post.likes_count > 0:
+                post.likes_count -= 1
+                post.save()
+
+            PostLike.objects.filter(post=post, user_id=user_id).delete()
+            liked = False
+        else:
+            # Если пользователь не ставил лайк, увеличиваем количество лайков
+            post.likes_count += 1
+            post.save()
+
+            # Создаем запись о лайке
+            post_like = PostLike(post=post, user_id=user_id)
+            post_like.save()
+
+            liked = True
+
+        # Обновляем состояние liked в сериализаторе
+        serializer = self.get_serializer(post)
+        data = serializer.data
+        data['liked'] = liked
+
+        return Response(data, status=status.HTTP_200_OK)
