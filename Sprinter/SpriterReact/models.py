@@ -162,6 +162,15 @@ class PostTag(models.Model):
         db_table = 'post_tag'
 
 
+class PostTag(models.Model):
+    post = models.ForeignKey(Post, models.DO_NOTHING, blank=True, null=True)
+    tag = models.ForeignKey('Tag', models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'post_tag'
+
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 class MyUserManager(BaseUserManager):
